@@ -5,11 +5,49 @@
     <h1>Add Entry:</h1>
     <fieldset>
       <label for="date">Date</label>
-      <input type="date" id="date" name="date" />
+      <input type="date" id="e" name="date" min="2015-01-01" />
     </fieldset>
     <fieldset>
       <label for="course">Course</label>
-      <input type="text" id="course" name="course" />
+      <input list="courses" id="course" name="course" placeholder="Select or Type Course" />
+      <datalist id="courses">
+        <option value="LS95" />
+        <option value="RB100" />
+        <option value="JS100" />
+        <option value="RB101" />
+        <option value="RB109" />
+        <option value="JS101" />
+        <option value="JS109" />
+        <option value="RB120" />
+        <option value="RB129" />
+        <option value="JS120" />
+        <option value="JS129" />
+        <option value="RB130" />
+        <option value="RB139" />
+        <option value="JS130" />
+        <option value="JS139" />
+        <option value="LS170" />
+        <option value="LS171" />
+        <option value="RB175" />
+        <option value="JS175" />
+        <option value="LS180" />
+        <option value="LS181" />
+        <option value="RB185" />
+        <option value="JS185" />
+        <option value="Optional Project" />
+        <option value="RB189" />
+        <option value="JS189" />
+        <option value="LS202" />
+        <option value="JS210" />
+        <option value="JS211" />
+        <option value="LS215" />
+        <option value="LS216" />
+        <option value="JS225" />
+        <option value="JS229" />
+        <option value="JS230" />
+        <option value="JS239" />
+        <option value="RB299" />
+      </datalist>
     </fieldset>
     <fieldset>
       <label for="lesson">Lesson</label>
@@ -32,31 +70,35 @@
     </fieldset>
   </fieldset>
 </form>
-
-<table class="full-width large-text">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Course</th>
-      <th>Lesson</th>
-      <th>Hours</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @log.each do |entry| %>
+<form action="/" method="get">
+  <table class="full-width large-text">
+    <thead>
       <tr>
-        <td><%= entry[:day] %></td>
-        <td><%= entry[:course_id] %></td>
-        <td><%= entry[:lesson] %></td>
-        <td><%= entry[:hours] %></td>
-        <td><%= entry[:notes] %></td>
+        <th>Date</th>
+        <th>Course</th>
+        <th>Lesson</th>
+        <th>Hours</th>
+        <th>Notes</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-<nav>
-  <a href="?page=<%= previous_page %>">Previous</a>
-  This is page <%= @page %>.
-  <a href="?page=<%= next_page %>">Next</a>
-</nav>
+    </thead>
+    <tbody>
+      <% @log.each do |entry| %>
+        <tr>
+          <td>
+            <input type="text" id="lesson" name="lesson" value="<%= entry[:day] %>" />
+            <input type="submit" hidden />
+          </td>
+          <td><%= entry[:course_id] %></td>
+          <td><%= entry[:lesson] %></td>
+          <td><%= entry[:hours] %></td>
+          <td><%= entry[:notes] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <nav>
+    <a href="?page=<%= previous_page %>">Previous</a>
+    This is page <%= @page %>.
+    <a href="?page=<%= next_page %>">Next</a>
+  </nav>
+<form/>

@@ -46,10 +46,10 @@ INSERT INTO courses (course_number, name, ruby, javascript, phase) VALUES
   
 CREATE TABLE timelog (
   id serial PRIMARY KEY,
-  day date NOT NULL DEFAULT CURRENT_DATE,
-  course int REFERENCES courses (id),
-  lesson int,
-  hours decimal(3,2),
+  "date" date NOT NULL DEFAULT CURRENT_DATE,
+  course text,
+  lesson text,
+  hours decimal(5,2),
   notes text
 );
 

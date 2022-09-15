@@ -33,4 +33,7 @@
       <%= yield %>
     </main>
   </body>
+  <script>
+    document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+  </script>
 </html>

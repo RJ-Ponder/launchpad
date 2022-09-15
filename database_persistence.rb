@@ -21,16 +21,16 @@ class DatabasePersistence
   
   def timelog(page)
     offset = page.to_i * 10
-    sql ="SELECT * FROM timelog ORDER BY day DESC LIMIT 10 OFFSET $1;"
+    sql ="SELECT * FROM timelog ORDER BY date DESC LIMIT 10 OFFSET $1;"
     result = query(sql, offset)
     result.map do |tuple|
-      { day: tuple["day"], course_id: tuple["course_id"], lesson: tuple["lesson"], hours: tuple["hours"], notes: tuple["notes"] }
+      { day: tuple["date"], course_id: tuple["course"], lesson: tuple["lesson"], hours: tuple["hours"], notes: tuple["notes"] }
     end
   end
   
   def add_entry(date, course, lesson, time, notes)
-    sql = "INSERT INTO timelog (day, course_id, lesson, hours, notes) VALUES ($1, 20, $2, $3, $4);"
-    query(sql, date, lesson, time, notes)
+    sql = "INSERT INTO timelog (date, course, lesson, hours, notes) VALUES ($1, $2, $3, $4, $5);"
+    query(sql, date, course, lesson, time, notes)
   end
   
   def hours_per_day_last_ten

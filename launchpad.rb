@@ -33,6 +33,14 @@ helpers do
   def next_page
     @page.to_i + 1
   end
+  
+  def date_validation(date)
+    
+  end
+  
+  def time_validation(time)
+    
+  end
 end
 
 get "/" do
@@ -57,7 +65,10 @@ post "/log" do
   hours = params[:hours]
   minutes = params[:minutes]
   notes = params[:notes]
-  time = minutes.to_i / 60 + hours.to_i
+  time = minutes.to_i / 60.0 + hours.to_i
+  
+  date_validation(date)
+  time_validation(time)
   
   @storage.add_entry(date, course, lesson, time, notes)
   redirect "/log"
