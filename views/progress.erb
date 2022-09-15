@@ -1,1 +1,44 @@
 <h1>Progress</h1>
+<h2>Ruby Track</h2>
+<table class="full-width large-text">
+  <thead>
+    <tr>
+      <th class="course-no">Course No.</th>
+      <th class="course-name">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <% if course[:ruby] == true %>
+        <tr>
+          <td><%= course[:number] %></td>
+          <td><%= course[:name] %></td>
+        </tr>
+      <% else %>
+        <% next %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Javascript Track</h2>
+<table class="full-width large-text">
+  <thead>
+    <tr>
+      <th class="course-no">Course No.</th>
+      <th class="course-name">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <% if course[:javascript] == true %>
+        <tr>
+          <td><%= course[:number] %></td>
+          <td><%= course[:name] %></td>
+        </tr>
+      <% else %>
+        <% next %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
