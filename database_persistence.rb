@@ -1,6 +1,9 @@
 require "pg"
+require "date"
 
 class DatabasePersistence
+  TIMELOG_DISPLAY_COUNT = 15
+  
   def initialize(logger)
     @db = PG.connect(dbname: "launchpad")
     @logger = logger
@@ -19,32 +22,99 @@ class DatabasePersistence
     end
   end
   
-  def timelog(page)
-    offset = page.to_i * 10
-    sql ="SELECT * FROM timelog ORDER BY date DESC LIMIT 10 OFFSET $1;"
-    result = query(sql, offset)
+  def timelog(current_page)
+    offset = (current_page.to_i - 1) * TIMELOG_DISPLAY_COUNT
+    sql = <<~SQL
+      SELECT id, TO_CHAR(date, 'MM/DD/YYYY') AS date, time, course, lesson,  hours, minutes, CONCAT(hours, ':', TO_CHAR(minutes, 'fm00')) AS "duration", notes
+      FROM timelog AS t
+      ORDER BY t.date DESC, time DESC
+      LIMIT $1
+      OFFSET $2;
+    SQL
+    
+    result = query(sql, TIMELOG_DISPLAY_COUNT, offset)
     result.map do |tuple|
-      { day: tuple["date"], course_id: tuple["course"], lesson: tuple["lesson"], hours: tuple["hours"], notes: tuple["notes"] }
+      { id: tuple["id"], date: tuple["date"], time: tuple["time"], course: tuple["course"], lesson: tuple["lesson"], hours: tuple["hours"], minutes: tuple["minutes"], duration: tuple["duration"], notes: tuple["notes"] }
     end
   end
   
-  def add_entry(date, course, lesson, time, notes)
-    sql = "INSERT INTO timelog (date, course, lesson, hours, notes) VALUES ($1, $2, $3, $4, $5);"
-    query(sql, date, course, lesson, time, notes)
-  end
-  
-  def hours_per_day_last_ten
-    sql = "SELECT day, sum(hours) FROM timelog GROUP BY day ORDER BY day DESC LIMIT 10;"
+  def entries_count
+    sql = "SELECT COUNT(id) FROM timelog;"
     result = query(sql)
-    # I want 1 hash with each day as the key and each hour as the value
-    day_hour_hash = {}
+    result.values.flatten[0]
+  end
+  
+  def add_entry(date, course, lesson, hours, minutes, notes)
+    sql = "INSERT INTO timelog (date, course, lesson, hours, minutes, notes) VALUES ($1, $2, $3, $4, $5, $6);"
+    query(sql, date, course, lesson, hours, minutes, notes)
+  end
+  
+  def study_hours_per_day
+    # week - either past 7 days or Monday - Sunday or Sunday - Saturday
+    # month - either past 30 days or calendar month
+    # custom - start date and end date
+    start_date = (Date.today - 7)
+    end_date = (Date.today - 1)
+    create_date_hash(start_date, end_date)
+    # Write a method that creates a hash of dates in a range with a key of the date and a value of 0
+    
+    
+    sql = <<~SQL
+      SELECT TO_CHAR(date, 'MM-DD-YYYY') AS date, SUM(hours) AS hours, SUM(minutes) AS minutes
+      FROM timelog as t
+      WHERE t.date >= $1 AND t.date <= $2
+      GROUP BY t.date
+      ORDER BY t.date ASC;
+    SQL
+    # result = query(sql, start_date, end_date)
+    # day_hours = {}
+    # result.map do |tuple|
+    #   total_hours = tuple["hours"].to_i + (tuple["minutes"].to_i / 60.0)
+    #   day_hours[tuple["date"]] = total_hours
+    # end
+    # day_hours
+  end
+  
+  def study_hours_per_course
+    sql = <<~SQL
+      SELECT course, ROUND(SUM(hours) + SUM(minutes)/60.0, 2) AS hours
+      FROM timelog
+      JOIN courses ON course_number = course
+      GROUP BY course, courses.id
+      ORDER BY courses.id;
+    SQL
+    
+    result = query(sql)
+    course_hours = {}
     result.map do |tuple|
-      day_hour_hash[tuple["day"]] = tuple["sum"]
+      course_hours[tuple["course"]] = tuple["hours"]
     end
-    day_hour_hash
+    course_hours
+  end
+  
+  def edit_entry(log_id, date, course, lesson, hours, minutes, notes)
+    sql = <<~SQL
+      UPDATE timelog
+      SET date = $1, course = $2, lesson = $3, hours = $4, minutes = $5, notes = $6
+      WHERE id = $7;
+    SQL
+    query(sql, date, course, lesson, hours, minutes, notes, log_id)
   end
   
   def disconnect
     @db.close
+  end
+  
+  private
+  
+  def create_date_hash(start_date, end_date)
+    hash = {}
+    loop do
+      formatted_date = start_date.strftime('%a, %m/%d')
+      hash[formatted_date] = 0
+      start_date += 1
+      break if start_date > end_date
+    end
+    hash
   end
 end

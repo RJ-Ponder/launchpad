@@ -5,7 +5,7 @@
     <h1>Add Entry:</h1>
     <fieldset>
       <label for="date">Date</label>
-      <input type="date" id="e" name="date" min="2015-01-01" />
+      <input type="date" id="today" name="date" min="2015-01-01" />
     </fieldset>
     <fieldset>
       <label for="course">Course</label>
@@ -66,39 +66,54 @@
       <input type="text" id="notes" name="notes" />
     </fieldset>
     <fieldset>
-      <input type="submit" value="Enter" />
+      <input type="submit" value="Add New Entry" />
     </fieldset>
   </fieldset>
 </form>
-<form action="/" method="get">
-  <table class="full-width large-text">
-    <thead>
+
+<p><%= @parameters %></p>
+<% @log.each do |entry| %>
+  <form action="/log/edit" method="post" id="<%= entry[:id] %>">
+    <input type="hidden" name="log_id" value="<%= entry[:id] %>" />
+    <input type="submit" hidden />
+  </form>
+<% end %>
+
+<table class="full-width large-text">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Course</th>
+      <th>Lesson</th>
+      <th>Study Time</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @log.each do |entry| %>
       <tr>
-        <th>Date</th>
-        <th>Course</th>
-        <th>Lesson</th>
-        <th>Hours</th>
-        <th>Notes</th>
+        <td><input type="text" name="date" form="<%= entry[:id] %>" value="<%= entry[:date] %>" /></td>
+        <td><input type="text" name="course" form="<%= entry[:id] %>" value="<%= entry[:course] %>" /></td>
+        <td><input type="text" name="lesson" form="<%= entry[:id] %>" value="<%= entry[:lesson] %>" /></td>
+        <td><input type="text" name="duration" form="<%= entry[:id] %>" value="<%= entry[:duration] %>" /></td>
+        <td><input type="text" name="notes" form="<%= entry[:id] %>" value="<%= entry[:notes] %>" /></td>
       </tr>
-    </thead>
-    <tbody>
-      <% @log.each do |entry| %>
-        <tr>
-          <td>
-            <input type="text" id="lesson" name="lesson" value="<%= entry[:day] %>" />
-            <input type="submit" hidden />
-          </td>
-          <td><%= entry[:course_id] %></td>
-          <td><%= entry[:lesson] %></td>
-          <td><%= entry[:hours] %></td>
-          <td><%= entry[:notes] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <nav>
-    <a href="?page=<%= previous_page %>">Previous</a>
-    This is page <%= @page %>.
-    <a href="?page=<%= next_page %>">Next</a>
-  </nav>
-<form/>
+    <% end %>
+  </tbody>
+</table>
+
+<nav class="pagination">
+  <span class="prev"><a href="?page=<%= previous_page %>">Previous</a></span>
+  <% paginate.each do |page_number| %>
+    <% if page_number == @current_page %>
+      <span class="page current">
+        <a href="?page=<%= page_number %>"><strong><%= page_number %></strong></a>
+      </span>
+    <% else %>
+      <span class="page">
+        <a href="?page=<%= page_number %>"><%= page_number %></a>
+      </span>
+    <% end %>
+  <% end %>
+  <span class="next"><a href="?page=<%= next_page %>">Next</a></span>
+</nav>

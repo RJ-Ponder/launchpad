@@ -47,11 +47,21 @@ INSERT INTO courses (course_number, name, ruby, javascript, phase) VALUES
 CREATE TABLE timelog (
   id serial PRIMARY KEY,
   "date" date NOT NULL DEFAULT CURRENT_DATE,
+  "time" time NOT NULL DEFAULT CURRENT_TIME,
   course text,
   lesson text,
-  hours decimal(5,2),
+  hours integer,
+  minutes integer,
   notes text
 );
+
+
+INSERT INTO timelog (course, lesson, hours, minutes, notes) VALUES
+  ('RB101', 1, 2, 35, 'My first entry'),
+  ('RB120', 4, 1, 5, 'My second entry'),
+  ('Project', 'Brainstorm', 0, 15, 'My third entry');
+  
+select *, CONCAT(hours, ':', TO_CHAR(minutes, 'fm00')) AS "h:mm" from timelog;
 
 CREATE TABLE benchmarks (
   id serial PRIMARY KEY,
