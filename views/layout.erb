@@ -3,37 +3,36 @@
   <head>
     <title>Launchpad</title>
     <meta charset="UTF-8">
-    <!--<link rel="stylesheet" href="https://d24f1whwu8r3u4.cloudfront.net/assets/application-74983f505cc0b62a1ef3d122458a7c983eac45d5c5b06308ab562f8b30d9a6a4.css" data-turbolinks-track="reload" />-->
-    <!--<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crete+Round:400,400italic|Open+Sans" data-turbolinks-track="reload" />-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" data-turbolinks-track="reload" />-->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
     <link rel="stylesheet" href="/stylesheets/whitespace-reset.css">
     <link rel="stylesheet" href="/stylesheets/application.css">
     <script src="/javascripts/chartkick.js"></script>
     <!--<script src="/javascripts/chart.js"></script>-->
     <!--<script src="/javascripts/chartjs-adapter-date-fns.bundle.js"></script>-->
-    <!--<script src="https://www.gstatic.com/charts/loader.js"></script>-->
-    <script src="/javascripts/highcharts.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--<script src="/javascripts/highcharts.js"></script>-->
   </head>
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="/">Launchpad</a></li>
-          <li><a href="/log">Log</a></li>
-          <li><a href="/progress">Progress</a></li>
-          <li><a href="/calendar">Calendar</a></li>
-          <li><a href="/reports">Reports</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/account">Account</a></li>
-        </ul>
-      </nav>
-    </header>
+    <!--<nav class="topbar">-->
+    <!--  <li class="logo"><a href="/">Launchpad</a></li>-->
+    <!--  <li class="toggle"><a href="#">Menu</a></li>-->
+    <!--</nav>-->
+    <nav class="sidebar">
+      <ul class="menu">
+        <li class="logo"><a href="/">Launchpad</a></li>
+        <li class="item"><a href="/log">Log</a></li>
+        <li class="item"><a href="/progress">Progress</a></li>
+        <li class="item"><a href="/calendar">Calendar</a></li>
+        <li class="item"><a href="/reports">Reports</a></li>
+        <li class="item"><a href="/about">About</a></li>
+        <li class="item"><a href="/account">Account</a></li>
+      </ul>
+    </nav>
     <main>
       <%= yield %>
     </main>
+    <!--<script src="/javascripts/nav-menu.js"></script>-->
   </body>
-  <script>
-    document.getElementById('today').value = new Date().toISOString().substring(0, 10);
-  </script>
+  <!--<script>-->
+  <!--  document.getElementById('today').value = new Date().toISOString().substring(0, 10);-->
+  <!--</script>-->
 </html>

@@ -55,24 +55,23 @@ class DatabasePersistence
     # custom - start date and end date
     start_date = (Date.today - 7)
     end_date = (Date.today - 1)
-    create_date_hash(start_date, end_date)
+    
     # Write a method that creates a hash of dates in a range with a key of the date and a value of 0
     
     
     sql = <<~SQL
-      SELECT TO_CHAR(date, 'MM-DD-YYYY') AS date, SUM(hours) AS hours, SUM(minutes) AS minutes
+      SELECT TO_CHAR(date, 'Dy, MM/DD') AS date, ROUND(SUM(hours) + SUM(minutes)/60.0, 2) AS hours
       FROM timelog as t
       WHERE t.date >= $1 AND t.date <= $2
       GROUP BY t.date
-      ORDER BY t.date ASC;
+      ORDER BY t.date;
     SQL
-    # result = query(sql, start_date, end_date)
-    # day_hours = {}
-    # result.map do |tuple|
-    #   total_hours = tuple["hours"].to_i + (tuple["minutes"].to_i / 60.0)
-    #   day_hours[tuple["date"]] = total_hours
-    # end
-    # day_hours
+    result = query(sql, start_date, end_date)
+    date_range = create_date_hash(start_date, end_date)
+    result.each do |tuple|
+      date_range[tuple["date"]] = tuple["hours"]
+    end
+    date_range
   end
   
   def study_hours_per_course
@@ -86,7 +85,7 @@ class DatabasePersistence
     
     result = query(sql)
     course_hours = {}
-    result.map do |tuple|
+    result.each do |tuple|
       course_hours[tuple["course"]] = tuple["hours"]
     end
     course_hours
