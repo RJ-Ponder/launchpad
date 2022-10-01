@@ -95,6 +95,13 @@ post "/log/edit" do
   redirect "/log"
 end
 
+post "/log/sort" do
+  # go back to the first page of a new sort
+  # update the order by clause with arguments if it exists from this post method
+  # default arguments are date desc, time desc
+  # post is true false alternating for asc or desc
+end
+
 get "/progress" do
   @courses = @storage.all_courses
   erb :progress

@@ -110,40 +110,71 @@ INSERT INTO benchmarks (course_id, fast, moderate, slow) VALUES
   
   
 Prep
-LS95 11, 23, 39
-JS100	9	42	72
+-- LS95 11, 23, 39
+-- JS100	9	42	72
 Back-end							
-JS101	200	233	265
-JS120	84	107	142
-JS130	73	80	100
-LS170	12	31	58
-JS175	22	31	42
-LS180	32	51	111
-JS185	16	20	25
-Project	28	42	57
-JS189	15	22	35
+-- JS101	200	233	265
+-- JS120	84	107	142
+-- JS130	73	80	100
+-- LS170	12	31	58
+-- JS175	22	31	42
+-- LS180	32	51	111
+-- JS185	16	20	25
+-- Project	28	42	57
+-- JS189	20	40	60
 Front-end
-LS202	7	48	96
-LS215	32	62	84
-JS230	89	141	186
+-- LS202	7	48	96
+-- LS215	32	62	84
+-- JS230	89	141	186
 
 Prep										
-LS95	14	30	52
-RB100	30	50	75
+-- LS95	14	30	52
+-- RB100	30	50	75
 Back-end										
-RB101	134	200	289
-RB120	85	117	163
-RB130	55	88	155
-LS170	16	41	76
-RB175	40	74	123
-LS180	42	67	146
-RB185	8	20	46
-Project 36	55	75
-RB189	20	50	80
+-- RB101	134	200	289
+-- RB120	85	117	163
+-- RB130	55	88	155
+-- LS170	16	41	76
+-- RB175	40	74	123
+-- LS180	42	67	146
+-- RB185	8	20	46
+-- Project 36	55	75
+-- RB189	20	40	60
 Front-end										
-LS202	15	63	127
-JS210	41	102	167
-LS215	42	82	111
-JS225	13	82	145
-JS230	116	186	244
+-- LS202	15	63	127
+-- JS210	41	102	167
+-- LS215	42	82	111
+-- JS225	13	82	145
+-- JS230	116	186	244
 
+UPDATE courses
+SET fast = 15, moderate = 63, slow = 127
+WHERE course_number = 'LS202';
+
+
+
+-- - sort each column ascending or descending
+-- - search a string and pull up every record (row) that contains that string
+-- ## Reports
+-- - Study streak
+-- -   XX days in a row!
+-- - Column graph - study hours per time period
+-- -   Calendar Week (Sunday to Saturday)
+-- -   Calendar Month
+-- -   Rolling Week (last 7 days)
+-- -   Rolling Month (last 28 days by week buckets)
+-- -   Custom (when greater than or equal to 28 days, organize into week buckets)
+-- - Banded bar chart
+-- -   Study hours per course with lesson bands
+-- -   Study hours per course with course/assessment bands
+-- - Pie chart
+-- -   % of study hours per course (assessment separate)
+-- -   % of study hours per course (assessment combined)
+-- - Statistics
+-- -   Total study hours
+-- -   Total study hours per week
+-- -   Total study hours per course
+-- -   Average study hours per day
+-- -   Average study hours per active day
+-- -   Average study hours per week
+-- -   Average study hours per active week (a week in which you study at least one day)
