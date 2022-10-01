@@ -3,7 +3,7 @@ require "thin"
 require "chartkick"
 require_relative "database_persistence"
 require_relative "simple_calendar"
-
+# test github
 configure do
   set :server, "thin"
 end
